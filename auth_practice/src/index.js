@@ -6,12 +6,31 @@ import Register from "./Register";
 import Profile from "./Profile";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const options = {
+  // you can also just use 'bottom center'
+  position: positions.BOTTOM_CENTER,
+  timeout: 5000,
+  offset: "30px",
+  // you can also just use 'scale'
+  transition: transitions.SCALE,
+};
+
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="login" element={<App />} />
+      <Route
+        path="login"
+        element={
+          <AlertProvider template={AlertTemplate} {...options}>
+            <App />
+          </AlertProvider>
+        }
+      />
       <Route path="register" element={<Register />} />
       <Route path="profile" element={<Profile />} />
     </Routes>

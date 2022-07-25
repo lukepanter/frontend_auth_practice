@@ -1,7 +1,31 @@
-//import { Route, Routes } from 'react-router-dom';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import React from "react";
+import { useAlert } from "react-alert";
 
 function App() {
+  let navigate = useNavigate();
+  let alert = useAlert();
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const login = async () => {
+    let path = `../profile`;
+
+    try {
+      await axios
+        .post("http://localhost:5000/auth/login", {
+          grant_type: "password",
+          username: username,
+          user_password: password,
+        })
+        .then((res) => {
+          navigate(path, { replace: true });
+        });
+    } catch (error) {
+      alert.show(error.message);
+    }
+  };
+
   return (
     <div className="w-screen h-screen bg-violet-500 ">
       <div
@@ -18,11 +42,15 @@ function App() {
 
           <input
             type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="border-2 border-slate-200 rounded-md w-5/6"
           />
           <p className="w-5/6 pb-1 pl-1 pt-5 font-normal">Password</p>
           <input
             type="text"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="border-2 border-slate-200 rounded-md w-5/6"
           />
 
@@ -30,6 +58,7 @@ function App() {
             type="button"
             value="Log in"
             className="mt-7 py-1 w-5/6 bg-lime-700 text-white rounded-md"
+            onClick={login}
           />
           <div className="flex mt-5">
             <p>Need an account ? </p>
